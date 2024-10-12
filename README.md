@@ -1,3 +1,3 @@
-# nest-scaffold
+# nest-captcha
 
-A nest project template I usually use（我平时使用的 NestJS 项目模版）
+CAPTCHA module implemented using cache-manager, uuid, and svg-captcha（用 cache-manager、uuid 和 svg-captcha 实现的图形验证码模块）
