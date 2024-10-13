@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <button id="refresh">refresh</button>
+    </div>
+    <div id="captchaImg"></div>
+    <script>
+      const refresh = async () => {
+        const imgWrapper = document.querySelector('#captchaImg');
+        const data = await fetch('/api/rest/captcha').then((res) => res.json());
+        sessionStorage.sessionId = data.sessionId;
+        imgWrapper.innerHTML = data.svg;
+      };
+
+      document.querySelector('#refresh').addEventListener('click', refresh);
+
+      refresh();
+    </script>
+  </body>
+</html>
