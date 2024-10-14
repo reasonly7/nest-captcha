@@ -16,9 +16,10 @@ export class CaptchaService {
       noise: 3,
       color: true,
       background: '#ffffff',
+      charPreset: '0123456789',
     });
     const sessionId = randomUUID();
-    await this.cacheManager.set(sessionId, captcha.text, 5 * 1000);
+    await this.cacheManager.set(sessionId, captcha.text, 10 * 1000);
     return {
       sessionId,
       svg: captcha.data,

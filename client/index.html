@@ -8,19 +8,52 @@
   <body>
     <div>
       <button id="refresh">refresh</button>
+      <input id="userInput" />
+      <button id="verify">verify</button>
+      <span id="countdown"></span>
     </div>
     <div id="captchaImg"></div>
+    <pre id="returnJson"></pre>
     <script>
+      let timer = null;
+      let count = 10;
       const refresh = async () => {
+        count = 10
+        clearInterval(timer);
         const imgWrapper = document.querySelector('#captchaImg');
         const data = await fetch('/api/rest/captcha').then((res) => res.json());
         sessionStorage.sessionId = data.sessionId;
         imgWrapper.innerHTML = data.svg;
+        document.querySelector('#userInput').value = '';
+
+        const countdown = document.querySelector('#countdown');
+        countdown.innerText = `Expires after ${count--} seconds`;
+        timer = setInterval(() => {
+          if (count === 0) {
+            countdown.innerText = 'Expired';
+            clearInterval(timer);
+            return;
+          }
+          countdown.innerText = `Expires after ${count--} seconds`;
+        }, 1000);
       };
 
       document.querySelector('#refresh').addEventListener('click', refresh);
 
       refresh();
+
+      document.querySelector('#verify').addEventListener('click', async () => {
+        const userInput = document.querySelector('#userInput').value;
+        const sessionId = sessionStorage.sessionId;
+        const data = await fetch(
+          `/api/rest/captcha/verify/${sessionId}?userInput=${userInput}`,
+        ).then((res) => res.json());
+        document.querySelector('#returnJson').innerText = JSON.stringify(
+          data || {},
+          null,
+          2,
+        );
+      });
     </script>
   </body>
 </html>
